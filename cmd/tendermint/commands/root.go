@@ -26,6 +26,16 @@ func registerFlagsRootCmd(cmd *cobra.Command) {
 	cmd.PersistentFlags().String("log_level", config.LogLevel, "log level")
 }
 
+// SetConfig sets the default config
+func SetConfig(c *cfg.Config) {
+	config = c
+}
+
+// SetLoggerToNoop sets the logger to a Noop.
+func SetLoggerToNoop() {
+	logger = log.NewNopLogger()
+}
+
 // ParseConfig retrieves the default environment configuration,
 // sets up the Tendermint root and ensures that the root exists
 func ParseConfig() (*cfg.Config, error) {
