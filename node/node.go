@@ -634,6 +634,15 @@ func NewNode(config *cfg.Config,
 		genesisDocProvider, dbProvider, metricsProvider, logger, options...)
 }
 
+// customChannels includes channels not originally
+// supported by tendermint core.
+var customChannels = []byte{}
+
+// AddChannels adds custom channels.
+func AddChannels(chs []byte) {
+	customChannels = append(customChannels, chs...)
+}
+
 // NewNodeWithCustomMempool returns a Node configured with
 // the given custom Mempool and Mempool reactor.
 func NewNodeWithCustomMempool(config *cfg.Config,
@@ -1303,13 +1312,13 @@ func makeNodeInfo(
 		DefaultNodeID: nodeKey.ID(),
 		Network:       genDoc.ChainID,
 		Version:       version.TMCoreSemVer,
-		Channels: []byte{
+		Channels: append([]byte{
 			bcChannel,
 			cs.StateChannel, cs.DataChannel, cs.VoteChannel, cs.VoteSetBitsChannel,
 			mempl.MempoolChannel,
 			evidence.EvidenceChannel,
 			statesync.SnapshotChannel, statesync.ChunkChannel,
-		},
+		}, customChannels...),
 		Moniker: config.Moniker,
 		Other: p2p.DefaultNodeInfoOther{
 			TxIndex:    txIndexerStatus,
