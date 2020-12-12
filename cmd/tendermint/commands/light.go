@@ -76,6 +76,40 @@ var (
 	witnessesKey = []byte("witnesses")
 )
 
+type Params struct {
+	ListenAddr         string
+	PrimaryAddr        string
+	WitnessAddrs       string
+	ChainID            string
+	Home               string
+	MaxOpenConnections int
+
+	Sequential     bool
+	TrustingPeriod time.Duration
+	TrustedHeight  int64
+	TrustedHash    []byte
+	TrustLevelStr  string
+
+	Verbose bool
+}
+
+// RunProxy runs the proxy
+func RunProxy(params *Params) error {
+	listenAddr = params.ListenAddr
+	primaryAddr = params.PrimaryAddr
+	witnessAddrsJoined = params.WitnessAddrs
+	chainID = params.ChainID
+	home = params.Home
+	maxOpenConnections = params.MaxOpenConnections
+	sequential = params.Sequential
+	trustingPeriod = params.TrustingPeriod
+	trustedHash = params.TrustedHash
+	trustedHeight = params.TrustedHeight
+	trustLevelStr = params.TrustLevelStr
+	verbose = params.Verbose
+	return runProxy(nil, []string{chainID})
+}
+
 func init() {
 	LightCmd.Flags().StringVar(&listenAddr, "laddr", "tcp://localhost:8888",
 		"serve the proxy on the given address")
